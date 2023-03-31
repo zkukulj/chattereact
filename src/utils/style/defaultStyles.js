@@ -112,3 +112,28 @@ export const MainWrapper = styled.div`
 
     }
 `;
+
+// WRAPPER FOR MESSAGES
+export const MessageDiv = styled.div`
+      width:100%;
+      padding:12px;
+      position:relative;
+`;
+export const MessageDivContent = styled.div`
+      padding:12px;
+      border-radius:12px;
+      top:0px;
+      ${ (props) => props.usersMessage &&    `
+        right:0px;
+        `
+        }
+       ${ (props) => props.notUsersMessage &&    `
+        left:0px;
+        `
+        }
+        ${ (props) => props.color &&    `
+        background-color: ${props.color};
+        color: ${colors.textSecondary};
+       `
+        }
+`;

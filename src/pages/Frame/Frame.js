@@ -1,18 +1,104 @@
-import React from 'react'
+import React, { useState,useEffect } from 'react'
 import { HeaderInner, HeaderWrapper,MessageInput,Button,FooterWrapper,MainWrapper } from '../../utils/style/defaultStyles'
+import {randomName,randomColor,clientID} from "../../utils/helpers"
+import Messages from '../../components/Messages/Messages'
+import Loader from '../../components/Loader/Loader'
 
 const Frame = () => {
-  return (
+  const [member, setMember] = useState([]);
+  const [messages, setMessages] = useState(null);
+  const [drone, setDrone] = useState(null);
+  const [room, setRoom] = useState(false);
+
+  useEffect(() => {
+    if (member.username !== "") {
+      const drone = new window.Scaledrone(clientID, {
+        data: member,
+      });
+      setDrone(drone);
+    }
+  }, [member]);
+  
+  useEffect(() => {
+    const droneEvents = () => {
+      drone.on("open", (error) => {
+        if (error) {
+          return console.error(error);
+        }
+        member.username = randomName();
+        member.color = randomColor() ;
+        setMember(member);
+        roomEvents();
+      });
+
+      drone.on("error", (error) => console.error(error));
+      drone.on("disconnect", () => {
+        console.log(
+          "Disconnected, Scaledrone reconnect"
+        );
+      });
+      drone.on("reconnect", () => {
+        console.log("Reconnected");
+      });
+    }; 
+    const roomEvents = () => {
+      const room = drone.subscribe(`observable-room`);
+      room.on("open", (error) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log("InDa room Frejm");
+          setRoom(true);
+        }
+      });
+      room.on("message", (message) => {
+        receiveMsg(message);
+      });
+    };
+
+    const receiveMsg = (message) => {
+      if(messages!==null){
+        setMessages(messages+message);
+      } else {
+        setMessages(message);
+      }
+        console.log(messages+message);
+        console.log("Frejm dobijo message");
+    };
+
+    if (drone && !member.username) {
+      droneEvents();
+    }
+
+  }, [drone, member,room,messages]);
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    let messText=document.querySelector("input").value;
+    let msg ={message: messText, name: member.username,color:member.color}
+    drone.publish({
+      room: 'observable-room',
+      message: msg
+    });
+    document.querySelector("input").value="";
+  }
+
+  return !room ? <Loader /> : (
     <>
     <HeaderWrapper isSecondary>
         <HeaderInner>
-            Another user
+            Chat app for: {member.username}
         </HeaderInner>
     </HeaderWrapper>
-    <MainWrapper isSecondary>Frame content</MainWrapper>
+    <MainWrapper isSecondary>
+    <Messages
+       messages={messages}
+       currentMember={member}
+    />
+     </MainWrapper>
     <FooterWrapper isSecondary>
-        <MessageInput placeholder="Type message here.."></MessageInput>
-        <Button>Send</Button>
+      <MessageInput type="text" placeholder="Type message here.."></MessageInput>
+      <Button onClick={handleSend}>Send</Button>
     </FooterWrapper>
     </>
   )
