@@ -21,6 +21,7 @@ const Home = () => {
   }, [member]);
   
   useEffect(() => {
+    // DEFAULT SCALEDRONE ACTIONS
       const droneEvents = () => {
         drone.on("open", (error) => {
           if (error) {
@@ -42,6 +43,7 @@ const Home = () => {
           console.log("Reconnected");
         });
       }; 
+      // SCALEDRONE HAS ROOMS WHICH HAVE SOME ACTIONS
       const roomEvents = () => {
         const room = drone.subscribe(`observable-room`);
         room.on("open", (error) => {
@@ -56,11 +58,13 @@ const Home = () => {
           receiveMsg(message);
         });
       };
-  
+      // RECEIVING MESSAGES FROM SCALEDRONE
       const receiveMsg = (message) => {
         let otherMessages="";
+        //document.querySelector(".DefaultMessage").style.display="none";
         if(document.getElementsByClassName('Message')!==null){
           otherMessages=document.querySelector(".Message").outerHTML;
+          console.log(otherMessages);
         }
           setMessages(message);
           if(otherMessages!==""){

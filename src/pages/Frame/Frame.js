@@ -57,13 +57,14 @@ const Frame = () => {
     };
 
     const receiveMsg = (message) => {
-      if(messages!==null){
-        setMessages(messages+message);
-      } else {
-        setMessages(message);
+      let otherMessages="";
+      //document.querySelector(".DefaultMessage").style.display="none";
+      if(document.getElementsByClassName('Message')!==null){
+        otherMessages=document.querySelector(".Message").outerHTML;
       }
-        console.log(messages+message);
-        console.log("Frejm dobijo message");
+        setMessages(message);
+        if(otherMessages!==""){
+        document.querySelector(".Messages").insertAdjacentHTML("beforeend",otherMessages);}
     };
 
     if (drone && !member.username) {
@@ -90,7 +91,7 @@ const Frame = () => {
             Chat app for: {member.username}
         </HeaderInner>
     </HeaderWrapper>
-    <MainWrapper isSecondary>
+    <MainWrapper isSecondary  className='Messages'>
     <Messages
        messages={messages}
        currentMember={member}

@@ -15,7 +15,7 @@ const Messages = ({messages,currentMember}) => {
       <MessageDivContent color={messages.data.color}><div>User: {messages.data.name}</div><div>Message: {messages.data.message}</div></MessageDivContent>
       </MessageDiv>
 
-      : <MessageDiv className='Message' color={currentMember.color}>{"NO message currently for: "+currentMember.username}</MessageDiv>
+      : <MessageDiv className='Message DefaultMessage' color={currentMember.color}></MessageDiv>
     }
     </>
   )
