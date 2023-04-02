@@ -5,11 +5,13 @@ import {randomName,randomColor,clientID} from "../../utils/helpers"
 import Messages from '../../components/Messages/Messages'
 import Loader from '../../components/Loader/Loader'
 
+
 const Home = () => {
   const [member, setMember] = useState([]);
-  const [messages, setMessages] = useState(false);
+  const [messages, setMessages] = useState([]);
   const [drone, setDrone] = useState(null);
   const [room, setRoom] = useState(false);
+  // const [messageList, setMessageList] = useState([]);
 
   useEffect(() => {
     if (member.username !== "") {
@@ -60,22 +62,14 @@ const Home = () => {
       };
       // RECEIVING MESSAGES FROM SCALEDRONE
       const receiveMsg = (message) => {
-        let otherMessages="";
-        //document.querySelector(".DefaultMessage").style.display="none";
-        if(document.getElementsByClassName('Message')!==null){
-          otherMessages=document.querySelector(".Message").outerHTML;
-          console.log(otherMessages);
-        }
-          setMessages(message);
-          if(otherMessages!==""){
-          document.querySelector(".Messages").insertAdjacentHTML("beforeend",otherMessages);}
+        setMessages(messages =>[...messages,message]);
       };
   
       if (drone && !member.username) {
         droneEvents();
       }
   
-    }, [drone, member,room]);
+    }, [drone, member,room,messages]);
 
   const handleSend = (e) => {
     e.preventDefault();
@@ -95,10 +89,16 @@ const Home = () => {
                 <HeaderInner>Chat app for: {member.username}</HeaderInner>
             </HeaderWrapper>
             <MainWrapper className='Messages'>
-            <Messages
-              messages={messages}
-              currentMember={member}
-            />
+              {
+              messages ?
+              messages.map((message) => (
+                <Messages
+                  messages={message}
+                  currentMember={member}
+                />
+              ))
+              :""
+            }
             </MainWrapper>
             <FooterWrapper>
                 <MessageInput 

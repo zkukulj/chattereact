@@ -6,7 +6,7 @@ import Loader from '../../components/Loader/Loader'
 
 const Frame = () => {
   const [member, setMember] = useState([]);
-  const [messages, setMessages] = useState(null);
+  const [messages, setMessages] = useState([]);
   const [drone, setDrone] = useState(null);
   const [room, setRoom] = useState(false);
 
@@ -57,14 +57,7 @@ const Frame = () => {
     };
 
     const receiveMsg = (message) => {
-      let otherMessages="";
-      //document.querySelector(".DefaultMessage").style.display="none";
-      if(document.getElementsByClassName('Message')!==null){
-        otherMessages=document.querySelector(".Message").outerHTML;
-      }
-        setMessages(message);
-        if(otherMessages!==""){
-        document.querySelector(".Messages").insertAdjacentHTML("beforeend",otherMessages);}
+      setMessages(messages =>[...messages,message]);
     };
 
     if (drone && !member.username) {
@@ -92,10 +85,14 @@ const Frame = () => {
         </HeaderInner>
     </HeaderWrapper>
     <MainWrapper isSecondary  className='Messages'>
-    <Messages
-       messages={messages}
-       currentMember={member}
-    />
+    {messages.map((message, index) => {
+        return (
+          <Messages key={index}
+                  messages={message}
+                  currentMember={member}
+                />
+        );
+      })}
      </MainWrapper>
     <FooterWrapper isSecondary>
       <MessageInput type="text" placeholder="Type message here.."></MessageInput>
