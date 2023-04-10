@@ -108,7 +108,7 @@ const Home = () => {
                 <Button onClick={handleSend}>Send</Button>
             </FooterWrapper>
         </HomeWrapper>
-        <Iframe url="http://localhost:3000/frame"
+        <Iframe url="https://chattereact.vercel.app/frame"
         width="100%"
         height="100%"
         display="block"
