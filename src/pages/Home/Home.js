@@ -11,7 +11,6 @@ const Home = () => {
   const [messages, setMessages] = useState([]);
   const [drone, setDrone] = useState(null);
   const [room, setRoom] = useState(false);
-  // const [messageList, setMessageList] = useState([]);
 
   useEffect(() => {
     if (member.username !== "") {
@@ -93,6 +92,7 @@ const Home = () => {
               messages ?
               messages.map((message) => (
                 <Messages
+                  key={message.id}
                   messages={message}
                   currentMember={member}
                 />

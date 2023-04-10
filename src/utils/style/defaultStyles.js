@@ -102,9 +102,11 @@ export const FooterWrapper = styled.footer`
 // WRAPPER FOR MESSAGES CONTENTS
 export const MainWrapper = styled.div`
       width:100%;
-      height:calc(100vh - 82px);
+      height:calc(100vh - 110px);
+      overflow: scroll;
       position: relative;
       background-color: ${colors.bgPrimary};
+      margin: 0 auto;
       ${ (props) => props.isSecondary &&    `
         background-color: ${colors.bgSecondary};
         color: ${colors.textSecondary};
@@ -115,22 +117,23 @@ export const MainWrapper = styled.div`
 
 // WRAPPER FOR MESSAGES
 export const MessageDiv = styled.div`
-      width:100%;
+      width:auto;
       padding:12px;
       position:relative;
+      display: flex;
+      ${ (props) => props.usersMessage &&    `
+            justify-content: flex-end;
+        `
+        }
+      ${ (props) => props.notUsersMessage &&    `
+            justify-content: flex-start;
+        `
+        }
 `;
 export const MessageDivContent = styled.div`
       padding:12px;
       border-radius:12px;
       top:0px;
-      ${ (props) => props.usersMessage &&    `
-        right:0px;
-        `
-        }
-       ${ (props) => props.notUsersMessage &&    `
-        left:0px;
-        `
-        }
         ${ (props) => props.color &&    `
         background-color: ${props.color};
         color: ${colors.textSecondary};
